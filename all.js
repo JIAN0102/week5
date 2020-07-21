@@ -165,12 +165,15 @@ new Vue({
       axios
         .post(api, this.form)
         .then((res) => {
-          this.isLoading = false;
-          console.log(res.data.data);
+          if (res.data.data.id) {
+            this.isLoading = false;
+            $("#orderModal").modal("show");
+            this.getCart();
+          }
         })
         .catch((err) => {
           this.isLoading = false;
-          console.log(err);
+          console.log(err.res.data.errors);
         });
     },
   },
