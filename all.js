@@ -19,6 +19,9 @@ new Vue({
   el: "#app",
   data: {
     isLoading: false,
+    status: {
+      loadingStatus: "",
+    },
     products: [],
     tempProduct: {
       num: 0,
@@ -56,12 +59,14 @@ new Vue({
         });
     },
     getProductDetail(id) {
+      this.status.loadingStatus = id;
       const api = `${this.apiPath}/${this.uuid}/ec/product/${id}`;
 
       axios.get(api).then((res) => {
         this.tempProduct = res.data.data;
         this.$set(this.tempProduct, "num", 0);
         $("#productModal").modal("show");
+        this.status.loadingStatus = "";
       });
     },
     getCart() {
@@ -84,7 +89,7 @@ new Vue({
         });
     },
     addCart(product, quantity = 1) {
-      // this.isLoading = true;
+      this.status.loadingStatus = product.id;
       const api = `${this.apiPath}/${this.uuid}/ec/shopping`;
 
       const cartItem = {
@@ -95,13 +100,14 @@ new Vue({
       axios
         .post(api, cartItem)
         .then((res) => {
-          // this.isLoading = false;
           $("#productModal").modal("hide");
           this.getCart();
+          this.status.loadingStatus = "";
         })
         .catch((err) => {
           console.log(err);
           $("#productModal").modal("hide");
+          this.status.loadingStatus = "";
         });
     },
     removeCart(product) {

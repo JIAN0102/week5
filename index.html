@@ -32,7 +32,7 @@
             <div class="text-center">
               <img
                 class="img-fluid"
-                :src="product.imageUrl"
+                :src="product.imageUrl[0]"
                 :alt="product.title"
               />
             </div>
@@ -60,16 +60,24 @@
                 type="button"
                 class="btn btn-outline-secondary btn-sm"
                 @click="getProductDetail(product.id)"
+                :disabled="status.loadingStatus === product.id"
               >
-                <i class="spinner-grow spinner-grow-sm"></i>
+                <i
+                  class="spinner-grow spinner-grow-sm"
+                  v-show="status.loadingStatus === product.id"
+                ></i>
                 查看更多
               </button>
               <button
                 type="button"
                 class="btn btn-outline-danger btn-sm ml-auto"
                 @click="addCart(product)"
+                :disabled="status.loadingStatus === product.id"
               >
-                <i class="spinner-grow spinner-grow-sm"></i>
+                <i
+                  class="spinner-grow spinner-grow-sm"
+                  v-show="status.loadingStatus === product.id"
+                ></i>
                 加到購物車
               </button>
             </div>
@@ -347,7 +355,10 @@
                 class="btn btn-primary"
                 @click="addCart(tempProduct, tempProduct.num)"
               >
-                <i class="fas fa-spinner fa-spin"></i>
+                <i
+                  class="fas fa-spinner fa-spin"
+                  v-show="status.loadingStatus === tempProduct.id"
+                ></i>
                 加到購物車
               </button>
             </div>
